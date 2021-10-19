@@ -1,0 +1,42 @@
+:root {
+    --c-dark1: 248, 50%, 10% ;
+    --c-light1: 248, 50%, 92% ;
+    --c-dark2: 248, 50%, 24% ;
+    --c-light2: 248, 28%, 72% ;
+    --c-alert: 122, 55%, 71% ;
+    --background-alpha: 1;
+}
+
+body {
+    background-color: hsla(var(--c-dark1), var(--background-alpha));
+    color: hsla(var(--c-light2), 1);
+}
+header {
+    background: linear-gradient(135deg, hsla(var(--c-dark2), var(--background-alpha)),
+    hsla(var(--c-dark1), var(--background-alpha)));
+    box-shadow: 0px 10px 20px 0px rgba(0,0,0,0.25);
+    color: black;
+}
+
+header h1 {
+    text-shadow: 0px 0px 20px hsla(var(--c-light2), 0.8);
+}
+
+main h1, main h2 {
+    color: hsla(var(--c-light1), 1);    
+}
+a {
+    color: hsla(var(--c-light1), 1);
+    font-style: italic;
+}
+a:hover {
+    color: hsla(var(--c-alert), 1);
+}
+em {
+    color: hsla(var(--c-alert), 1);
+}
+button {
+    background-color: inherit;
+    color: inherit;
+    border-width: 0px;
+}

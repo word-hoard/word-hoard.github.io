@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">   
+    <title>Electron interfaces for Python</title>
+    <style>
+    @import '../css/font-warlock.css';
+    @import '../css/colors-abyss.css';
+    @import '../css/layout-blog.css';
+    </style>
+    <script src="../scripts/click.js"></script>
+</head>
+<body>
+    
+    <header>
+        <h1>Electron interfaces for Python</h1>
+    <nav id="course_menu">
+    <a href="../index.html"><button>Home</button></a>
+    <button aria-roledescription="course links" click_toggle="#course_menu" >
+        Python
+    </button>
+    
+    <a href="../Python/the_CMD_library.html"><button>the CMD library</button></a>
+    
+    <a href="../Python/Easy_Data_Class_CLIs.html"><button>Easy Data Class CLIs</button></a>
+    
+    <a href="../Python/Electron_interfaces_for_Python.html"><button>Electron interfaces for Python</button></a>
+    
+</nav>
+    </header>
+    <main><h1>Calling and interacting with a Python sub process from Electron / Node</h1>
+<p><strong>Problem:</strong> Your JavaScript skills aren't as strong as your Python skills, but you want to use Python in an electron or node app. </p>
+<p><strong>Solution:</strong> Node can run sub processes fairly straightforwardly, However, I recommend npm installing <a href="https://www.npmjs.com/package/python-shell"><code>python-shell</code></a> which is a neat and thankfully small (sub 50k) helper library for launching and talking to the sub process that will run your python scripts. </p>
+<h2>Ingredients:</h2>
+<h3>node</h3>
+<ul>
+<li>node itself</li>
+<li>a basic <code>electron</code> app you have already made. (sorry I know this is a bit of a 'first catch your rabbit' section of 'how to make rabbit stew', but there are many excellent electron tutorials out there. This article is specifically about bringing in the python element)</li>
+<li><a href="https://www.npmjs.com/package/python-shell"><code>python-shell</code></a> </li>
+</ul>
+<h3>python</h3>
+<ul>
+<li><code>cmd</code> from the standard library.</li>
+</ul>
+<h2>Method</h2>
+<p>In this example I wanted to take a html input, channel it directly to my python process and display the result back on my html page with a minimal amount of javaScript.</p>
+<p>The downside I found to using <code>python-shell</code> was that using stdout as my communication medium, and that is not a proper messaging system. <code>python-shell</code> assumes each new line of output from the python process is a discrete response, and I wanted to use multiline output from python to generate elaborate chunks of html and svg. So you need to cache the lines as they come in, and have a simple text flag sent from python to say when a new message (<code>"new::msg"</code>) <em>really</em> started. All of this can be put together in a quick wrapper JS class called <code>pythonic.js</code> in the <code>scripts</code> folder of my project:</p>
+<pre><code>const { PythonShell } = require('python-shell');
+  class PythonObject {
+      constructor (py_script, output_id) {
+          this.shell = new PythonShell(py_script);
+          this.pyoutput = "";
+          this.output_node = document.getElementById(output_id);
+          this.shell.on('message', (message) =&gt; {this.pylinecache(message);});
+      }
+
+      pylinecache(message) {
+          message == "new::msg" ?  this.pyoutput = "" : this.pyoutput += message;
+          this.output_node.innerHTML = this.pyoutput;
+      }
+
+      send(message) {
+          this.shell.send(message);
+      }
+  }
+
+  module.exports.PythonObject = PythonObject;
+</code></pre>
+<p>From within an electron html page this can be used like this:</p>
+<pre><code>    &lt;div id="dialog"&gt;
+        &lt;input type="text" name="pyin" id="pyin" value="hello"&gt;&lt;br&gt;
+        &lt;button id="ask"&gt;ask python&lt;/button&gt;&lt;br&gt;
+        &lt;button id="lazy"&gt;python makes a lazy button&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div id="py_out"&gt; &lt;/div&gt;
+
+
+  &lt;script&gt;
+      const { PythonObject } = require('./scripts/pythonic');
+      let Py = new PythonObject('./scripts/chattercmd.py', 'py_out');
+
+      const toPy = () =&gt; {
+              let { value } = document.getElementById("pyin");
+              Py.send(`hello ${value}`);
+          };
+
+      const pyButton = () =&gt; {
+          Py.send("button");
+      };
+
+      const addClick = (id, fn) =&gt; {
+          document.getElementById(id).addEventListener('click', fn)
+      };
+      addClick('ask', toPy);
+      addClick('lazy', pyButton);
+  &lt;/script&gt;
+</code></pre>
+<p>So we create a python process, specify an output tag (obviously could be refined in line with your JS skills - <code>innerHTML</code> is always a very poor choice, but will do quite a lot). Then we create and bind specific functions to send different messages to our python sub process.</p>
+<p>Of course what we need from our python script is the ability to understand that the first word in the string sent is a function and the subsequent text is the argument(s). Thankfully that is very easy using the <code>cmd</code> module from the python standard library.</p>
+<pre><code>import cmd
+from sys import stdout
+from functools import wraps
+
+def pyshell(func):
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        stdout.write("new::msg\n")
+        stdout.write(func(*args, **kwargs))
+        stdout.write("\n")
+        stdout.flush()
+    return wrapper
+
+class Cmd_interface(cmd.Cmd):
+
+    prompt = ""
+
+    @pyshell
+    def do_hello(self, arg):
+        return f"You said hello with the following arg: {arg}"
+
+    @pyshell    
+    def do_bye(self, arg):
+        return "You said bye!"
+
+    @pyshell
+    def do_button(self, arg):
+        return """
+            &lt;button onClick="Py.send('bye')"&gt; 
+              press me to send 'bye' 
+            &lt;/button&gt;
+            """
+
+if __name__ == "__main__":
+    Cmd_interface().cmdloop()
+</code></pre>
+<p>Reading through the code there are some useful tricks:</p>
+<ul>
+<li>Using the <code>cmd</code> library to create a persistent python process and expose as many methods / functions as you like. <code>cmd</code> is the secret hero here, and if you haven't used it before give it a spin, it is in the standard lib. The TL:DR is that you can type <code>hello</code> followed by an argument (that could be a longish string) and it will get passed to the <code>do_hello</code> method, which in the context makes it feel like a very human sort of api.</li>
+<li>Use a class decorator <code>@pyshell</code> to manage stdout and prepend each multiline response with <code>new::msg</code> ready for the line cache we set up in <code>pythonic.js</code>.</li>
+<li>Get rid of the <code>cmd</code> prompt. It will mess with your output, so <code>prompt = ""</code> is handy.</li>
+</ul>
+<h2>Taking it further</h2>
+<p>This is a very hacky example that is very suited to prototyping. But there is more hackyness that could be added on:</p>
+<ul>
+<li>using your python process from within the <code>main.js</code> electron project entry point and then broadcasting results to individual pages via <code>ipc</code> is a neat strategy if you need your python process to be persistent with the lifespan of the app. The method I've shown above <em>is</em> persistent, but only within the lifespan of the page. Navigate away from that page and the process dies.</li>
+<li>use <code>Jinja2</code> or another templating engine to dynamically create the entire electron app (assuming you have electron installed globally) from a data source like a yaml file. This makes for a very lightweight project overhead. Node's dependency folder <code>node_modules</code> is often a horror of huge size in many node projects, but is a tiny 48 kb if you just use <code>python-shell</code> as your only dependency and make python do all the real work. </li>
+</ul>
+<h2>Coda : Other solutions</h2>
+<p>I wrote this article a while ago and then forgot about it until a much more sophisticated python to node library was mentioned on <a href="https://pythonbytes.fm/episodes/show/151/certified-it-works-on-my-machine">python bytes</a>. That reminded me that I'd done the spade work on this problem and realised that it was doing no one any good just sat on my own hard drive unread.</p>
+<p>There are other methods to communicate between node and python with other virtues: 
+- <a href="https://python-socketio.readthedocs.io/en/latest/intro.html#what-is-socket-io">python's socket io</a> and the <a href="https://socket.io/docs/">javascript io implimentation</a> could conceivably be a very clever solution, particularly if you want to just create an interface with <em>just</em> a static html page.</p>
+<ul>
+<li>using rpcs like this <a href="https://github.com/pazrul/electron-zerorpc-example">zerorpc in electron example</a></li>
+<li><a href="https://thecodinginterface.com/blog/bridging-nodejs-and-python-with-pynode/">PyNode</a> provides a highly engineered deep access to your python code from JS. </li>
+</ul></main>
+    <footer></footer>
+</body>
+</html>

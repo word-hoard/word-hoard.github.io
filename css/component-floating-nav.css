@@ -1,0 +1,95 @@
+#floating-nav {
+    --nav-width: 20vw;
+    --nav-height: 80vh;
+    background-color: hsla(var(--c-dark2), .66);
+    position: fixed;
+    right: 4vw;
+    top: 4vh;
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+    border-radius: 25px;
+    transition: 500ms;
+}
+
+#floating-nav h1 {
+    font-size: calc(18px + 1.5vh);
+    margin-bottom: 1vh;
+}
+
+#floating-nav p, #floating-nav button {
+    font-size: calc(18px + .5vh);
+}
+
+#floating-nav.clicked {
+    width: var(--nav-width);
+    height: var(--nav-height);
+    padding: 10px;
+    padding-bottom: 25px;
+}
+
+#floating-nav:hover {
+    animation-name: radar;
+    animation-duration: 1.5s;
+}
+
+@keyframes radar {
+    0%   {box-shadow: 0 0 3pt 2pt hsla(var(--c-light2), .66);
+        }
+    100% {box-shadow: 0 0 20pt 20pt hsla(var(--c-light2), 0);
+        }
+}
+
+#floating-nav menu::before {
+    display: block;
+    width: var(--nav-width);
+    height: var(--nav-height);
+    content: " ";
+    transition: 500ms;
+}
+
+#floating-nav.clicked menu::before {
+    height: 10px;
+}
+
+menu button {
+    width: 100%;
+    border-width: 0px;
+    text-align: left;
+    background-color: inherit;
+}
+menu button:hover {
+    animation-name: radar;
+    animation-duration: .5s;
+}
+
+.hamburger-icon {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    transform-origin: center center;
+    margin: 10px;
+}
+.hamburger-icon path {
+    stroke: white;
+    stroke-width: 3px;
+    fill: none;
+}
+.hamburger-icon, #hamburger-path-1, #hamburger-path-2, #hamburger-path-3 {
+    transition: ease-in 500ms;
+}
+.clicked .hamburger-icon {
+    transform: rotate(45deg);
+    transform-origin: inherit;
+}
+
+.clicked .hamburger-icon #hamburger-path-1 {
+    transform: translateY(10px);
+}
+.clicked .hamburger-icon #hamburger-path-2 {
+    transform: rotate(90deg);
+    transform-origin: center center;
+}
+.clicked .hamburger-icon #hamburger-path-3 {
+    transform: translateY(-10px);
+}

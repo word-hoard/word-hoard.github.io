@@ -1,0 +1,91 @@
+body {
+    padding: 0px;
+    margin: 0px;
+    display: grid;
+    grid-template-rows: minmax(15vh auto) auto 15vh;
+}
+
+header {
+    grid-row: 1 / 2;
+
+    display: grid;
+    grid-template-columns: 10vw 5vw auto 25vw;
+    grid-template-rows: auto auto;
+}
+
+header h1 {
+    grid-column: 2 / 4;
+    grid-row: 1 / 2;
+    font-size: calc(30px + 4vh);
+
+}
+
+header .logo {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+}
+
+#course_menu {
+    grid-column: 2 / 5;
+    grid-row: 2 / 3;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: left;
+    align-items: flex-start;
+    margin-bottom: 3vh;
+}
+
+#course_menu *:nth-child(2) {
+    text-align: left;
+    color: hsla(var(--c-light2), 1);
+}
+
+#course_menu *:nth-child(2):hover {
+    color: hsla(var(--c-alert), 1);
+}
+
+#course_menu *:nth-child(n+3) {
+    height: 0px;
+    visibility: hidden;
+    transition: height .5s;
+}
+#course_menu.clicked *:nth-child(n+3) {
+    visibility: visible;
+    height: 26px;
+
+}
+main {
+    grid-row: 2 / 3;
+    display: grid;
+    grid-template-columns: 10vw 5vw auto 25vw;
+    grid-template-rows: repeat(auto) ;
+}
+
+main * {
+    grid-column: 3 / 4;
+}
+
+footer {
+    grid-row: 3 / 4;
+}
+
+h1 {
+    font-size: calc(25px + 3vh);
+    margin-bottom: 3vh;
+}
+
+h2 {
+    font-size: calc(22px + 1.5vh);
+    margin-bottom: 1.5vh;    
+}
+
+p, td, li, code, button {
+    font-size: calc(20px + .7vh);
+    line-height: 1.2em;
+    margin-bottom: 1vh; 
+}
+
+code {
+    color: hsla(var(--c-alert), 1);
+}

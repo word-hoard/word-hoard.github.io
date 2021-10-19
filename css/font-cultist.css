@@ -1,0 +1,32 @@
+@font-face {
+    font-family: Fell;
+    src: url('fonts/IMFellDWPicaSC-Regular.ttf');
+}
+@font-face {
+    font-family: SpecialElite;
+    src: url('fonts/SpecialElite-Regular.ttf');
+}
+
+
+:root {
+    --font-fb: Palatino, serif; /* fallback*/
+    --font-title: Fell, var(--font-fb);
+    --font-text: SpecialElite, var(--font-fb);
+
+}
+
+h1, h2, header, header em {
+    font-family: var(--font-title);
+    font-weight: 300;
+}
+
+body, p, th, td, button {
+    font-family: var(--font-text);
+}
+
+em {
+    font-style: italic;
+}
+a {
+    text-decoration: none;
+}

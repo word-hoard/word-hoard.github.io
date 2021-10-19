@@ -1,0 +1,35 @@
+@font-face {
+    font-family: Cinzel;
+    src: url('fonts/CinzelDecorative-Regular.ttf');
+}
+@font-face {
+    font-family: Raleway;
+    src: url('fonts/Raleway-Regular.ttf');
+}
+@font-face {
+    font-family: RalewayItalic;
+    src: url('fonts/Raleway-Italic.ttf');
+}
+
+:root {
+    --font-fb: Palatino, serif; /* fallback*/
+    --font-title: Cinzel, var(--font-fb);
+    --font-text: Raleway, var(--font-fb);
+    --font-italic: RalewayItalic, var(--font-fb);
+}
+
+h1, h2, header, header em {
+    font-family: var(--font-title);
+    font-weight: 300;
+}
+
+body, p, th, td, button {
+    font-family: var(--font-text);
+}
+
+em {
+    font-family: var(--font-italic);
+}
+a {
+    text-decoration: none;
+}

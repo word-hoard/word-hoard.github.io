@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">   
+    <title>the CMD library</title>
+    <style>
+    @import '../css/font-warlock.css';
+    @import '../css/colors-abyss.css';
+    @import '../css/layout-blog.css';
+    </style>
+    <script src="../scripts/click.js"></script>
+</head>
+<body>
+    
+    <header>
+        <h1>the CMD library</h1>
+    <nav id="course_menu">
+    <a href="../index.html"><button>Home</button></a>
+    <button aria-roledescription="course links" click_toggle="#course_menu" >
+        Python
+    </button>
+    
+    <a href="../Python/the_CMD_library.html"><button>the CMD library</button></a>
+    
+    <a href="../Python/Easy_Data_Class_CLIs.html"><button>Easy Data Class CLIs</button></a>
+    
+    <a href="../Python/Electron_interfaces_for_Python.html"><button>Electron interfaces for Python</button></a>
+    
+</nav>
+    </header>
+    <main><h1>The Python CMD Library</h1>
+<p><strong>problem:</strong> You want to interact with a python script a way that suggests you need a graphic interface, but creating one is a pain and anyway you live on the command line.</p>
+<p><strong>problem:</strong> Your inputs into a script are explorative rather than sequential. Such as a script where you might want to scrape a website and then process the data in different ways.</p>
+<p><strong>problem:</strong> You use this one script for an annual audit. You wrote it but you always need to have the docs open when you use it. it would help to have auto complete</p>
+<p><strong>problem:</strong> text based games engage students. You want to use them to introduce python classes, but is there a simple way to do this?</p>
+<p><strong>solution</strong> <code>CMD</code> is a way of creating a command line interface for your python scripts and is part of the standard Python library. It is not a thousand miles away from using <code>input()</code> to interact with your user. But is far more powerful, as the user can choose what order to use different parts of you program.</p>
+<h2>What you <strong>have</strong> to know to use CMD</h2>
+<p>CMD is structured as a python class. It helps a little if you understand classes, but not much so don't worry if you haven't used classes before. To get it up and running, you import cmd and create a class that 'inherits' from cmd's base class. This means the boring stuff has been done for you:</p>
+<h3>Setting up the class methods</h3>
+<p>Within the class you can create functions that respond when the user types in different commands:</p>
+<pre><code>import cmd
+
+class Interface(cmd.CMD):
+
+    prompt = "My Project|&gt;"
+
+    def do_q(self, arg):
+    "type q and enter to quit"
+        return True
+
+    def do_greet(self, arg):
+    "type hello and a name to get a personalized greeting"
+        print(f'hello {arg}')
+
+if __name__ == "__main__":
+    Interface().cmdloop()
+</code></pre>
+<ul>
+<li>The prompt</li>
+<li>make a quit command first. </li>
+<li>the structure of a method</li>
+<li>running your code</li>
+</ul>
+<h2>What might catch you out</h2>
+<h3>keep your 'real' code separate</h3>
+<p>Beware of writing all your code directly into your cmd class. The best thing is to pass the user input to other functions elsewhere. So make something like:</p>
+<pre><code>    def do_greet(self, arg):
+        greet(arg)
+</code></pre>
+<p>This is good practice in most situations as it means that:</p>
+<p>1 The interface part of your code is unlikely to introduce bugs into your business code.
+2 You can construct more than one interface for your code. For example, You might have two interface functions that call a single underlying function with different defaults 
+3 You can pull down multiple code resources into a single interface.</p>
+<h3>users are human and bad at typing</h3>
+<p>The 'yeah but' to the 'keep your code separate' rule is realising your users are awful at typing or have misunderstood how to use your software. The <a href="#auto-complete">auto complete</a> methods you can build into <code>cmd</code> do much to reduce this, but cats walk on laptops. Python's <code>try: except:</code> is a perfect second line of defence for catching user errors and explaining why things went wrong.</p>
+<pre><code>    def do_greet(self, arg):
+        try:
+            print(greet(arg))
+        except:
+            print(f'sorry {arg} didn't work as an input for the greet command')
+</code></pre>
+<h3>(self, arg)</h3>
+<p>The next most common bit of pain is converting <code>arg</code> into the right data types. <code>arg</code> is typically a string consisting of everything typed after the command word (the <code>do_thing</code>), including spaces. You will sometimes need an intermediate function to convert it into integers and / or spilt it into tuples before passing the correct types to your function. This step can be combined with your input validation <code>try: except:</code> rules. So your final function will could look like:</p>
+<pre><code>    def do_add(self, arg):
+
+        numbers = convert_to_tuple(arg)
+        print(add(*numbers))
+
+def convert_to_tuple(arg):
+    try:
+        return tuple(int(i) for i in arg.split(' '))
+    except:
+        print('sorry, try using add followed by two separate numbers')
+</code></pre>
+<h2>Making cmd <strong>useful</strong></h2>
+<h3>Instant help</h3>
+<p>By far the easiest trick with cmd is that it will display the docstring of any function by typing <code>function_name ?</code>. It is that simple. Typing <code>?</code> by itself will list all commands available.</p>
+<h3>Make cmd your live documentation with preloop and precmd</h3>
+<p>It can be very effective to have a clear set of instructions for your program on screen at all times. <code>preloop</code> and <code>precmd</code> are built in functions that fire off at the beginning of the cmd session and before each command is executed respectively, so are well placed to deliver option prompts as well as describing your program state in human terms.</p>
+<pre><code>from os import system
+import platform
+
+if platform.system() == 'Windows':
+    clean = 'cls'
+else:
+    clean = 'clear'
+
+def clear_screen():
+    system(clean)
+
+# within your cmd interface add:
+def screen_refresh(self):
+    clear_screen()        
+    print('A short summary of the program state, with command reminders')
+
+def preloop(self):
+    self.screen_refresh()
+
+def precmd(self, line):
+    self.screen_refresh()
+    return Cmd.precmd(self, line)
+</code></pre>
+<h3>sub menus</h3>
+<p>One common design I often use is to have number based options rather than <code>do_setup</code>, particularly if the function called doesn't require arguments. So <code>do_1</code>, <code>do_2</code> etc. Coders always like to type fewer keystrokes don't they? This works well with a menu generated with <code>preloop</code> like this:</p>
+<pre><code>[1] setup
+[2] run some code
+[3] run some tests
+</code></pre>
+<p>However you aren't doing your user any favours if this list is too long. But setting up sub menus is as simple as creating a new <code>Submenu_1</code> class and then calling it with <code>Submenu_1.cmdloop()</code>. In order to not stay stuck in the submenu, I usually get most of the submenu commands to <code>return True</code> which automatically drops the user back into the parent menu once the command has executed. Bear in mind that if you want data to persist between menus you will definitely want your <code>cmd</code> classes to interact with a variable, function or object external to the <code>cmd</code> classes.</p>
+<h3>auto complete</h3>
+<p>You can get very good auto complete with a single boiler-plate function that compares partial entries to a list of available options. I find this very useful when the option list is dynamic over the lifetime of the program. For example, in a text based game, I used a 'take' function that auto completed based on what items were in the room.</p>
+<pre><code>secret_library_items = ['secret_message', 'gold_coin', 'rusty_key']
+
+def opt(self, text, options):
+    if not text:
+        suggest = options[:]
+    else:
+        suggest = [ f
+                    for f in options
+                    if f.startswith(text)
+                    ]
+    return suggest
+
+def do_take(self, arg):
+    print(f'you pick up {arg}')
+
+def complete_take(self, text, line, begidx, endidx):
+    return self.opt(text, self.secret_library_items)
+</code></pre>
+<h3>exploiting <code>cmd</code> persistence</h3>
+<p>If you launch a cmd script as a sub process you can use it as a persistent 'api' of sorts. This can be quite handy if you are trying to create interaction between python and a node or electron app without an <code>ipc</code> library. I've documented how to do this in my<a href="">electron loves cmd</a> post.</p></main>
+    <footer></footer>
+</body>
+</html>
