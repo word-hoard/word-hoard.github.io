@@ -1,21 +1,9 @@
-@font-face {
-    font-family: Cinzel;
-    src: url('fonts/CinzelDecorative-Regular.ttf');
-}
-@font-face {
-    font-family: Raleway;
-    src: url('fonts/Raleway-Regular.ttf');
-}
-@font-face {
-    font-family: RalewayItalic;
-    src: url('fonts/Raleway-Italic.ttf');
-}
+@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative&family=Raleway:ital,wght@0,200;0,300;1,100;1,200;1,300&display=swap');
 
 :root {
     --font-fb: Palatino, serif; /* fallback*/
-    --font-title: Cinzel, var(--font-fb);
-    --font-text: Raleway, var(--font-fb);
-    --font-italic: RalewayItalic, var(--font-fb);
+    --font-title: 'Cinzel Decorative', var(--font-fb);
+    --font-text: 'Raleway', var(--font-fb);
 }
 
 h1, h2, header, header em {
@@ -27,9 +15,6 @@ body, p, th, td, button {
     font-family: var(--font-text);
 }
 
-em {
-    font-family: var(--font-italic);
-}
 a {
     text-decoration: none;
 }
