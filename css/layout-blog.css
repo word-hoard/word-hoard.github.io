@@ -58,7 +58,7 @@ header .logo {
 main {
     grid-row: 2 / 3;
     display: grid;
-    grid-template-columns: 10vw 5vw auto 25vw;
+    grid-template-columns: 10vw 5vw 55vw 25vw;
     grid-template-rows: repeat(auto) ;
 }
 
