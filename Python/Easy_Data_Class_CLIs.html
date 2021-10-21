@@ -49,6 +49,15 @@ def clear():
         system("clear")
     else:
         system("cls")
+
+def status(obj):
+    "print a summary of a class object"
+        clear()
+        rule(obj.__doc__)
+        for d in [d for d in obj.__dict__ if d not in obj.hidden]:
+            para(f"{d}: [i]{obj.__dict__[d]}[/i]")
+        rule("")
+        para(obj.menu)
 </code></pre>
 <p>But now I can see what's going on in my code more clearly, I want to explore a bit, and maybe interact with it quickly, particularly if I'm tweaking input values rather than debugging code. </p>
 <p>Huh...</p>
@@ -56,7 +65,7 @@ def clear():
 <p>So it turns out the answer is no you can make a reasonably ok interface generator, but at the cost of compromise and loosing some of <code>cmd</code>'s superpowers. Obviously I'd like it to do better but like all craft 'this will do for now.' </p>
 <p>This kind of highlights a personal fixation of mine with keeping <code>__init__</code> simple and putting any elaborate data conversion shenanigans in a class or static method that generates an instance of the class. So I only call <code>Myclass('exactly the arguments that I want')</code> with safe, often hard coded data, and anywhere else I use <code>Myclass.from_specified_data_source("dodgy_data.csv")</code>. This allows for multiple entry points into a class that don't fight inheritance battles with each other. It also allows me to use data classes almost everywhere, which sounds daft but ends up with nicely predictable code.</p>
 <h2>The Command Line Interface class</h2>
-<p>The interface class will search for any methods in the data class starting with <code>do_</code> on the class it gets composited into and repurposes them as cli specific methods in the <a href="the_CMD_library.html">normal CMD way</a>. This sadly looses the really nice <code>cmd</code> help descriptors because the <code>do_</code> commands are created after initalization, but we can compensate by adding a menu of commands that lean heavily on method doc strings and by making the menu more readable with rich. </p>
+<p>The interface class will search for any methods in the data class starting with <code>do_</code> on the class it gets composited into and repurposes them as cli specific methods in the <a href="the_CMD_library.html">normal CMD way</a>. This sadly looses the really nice <code>cmd</code> help descriptors because the <code>do_</code> commands are created after initialization, but we can compensate by adding a menu of commands that lean heavily on method doc strings and by making this new style of menu more readable with rich.</p>
 <pre><code>from cmd import Cmd
 
 class Interface(Cmd):
@@ -64,8 +73,7 @@ class Interface(Cmd):
     prompt = "::&gt; "
 
     def do_q(self, arg):
-        "quit the menu"
-        self.postcmd(stop= True, line="end")
+        "quit"
         return True
 
     @staticmethod
@@ -74,53 +82,47 @@ class Interface(Cmd):
         func_names = [name for name in dir(obj)
                 if name.startswith("do_")]
         cli.create_menu(obj, func_names)
-        def print_menu(stop=False, line="end"):
-            if stop:
-                return True
-            para(cli.menu)
-
-        setattr(cli, 'preloop', print_menu)
-        setattr(cli, 'postcmd', print_menu)
+        status(obj)
         for fn in func_names:
             setattr(cli, fn, getattr(obj, fn))
         cli.cmdloop()
 
-    def create_menu(self, obj, func_names: list):
-        menu_str = "[bold #3c1bc2]COMMANDS[/bold #3c1bc2]\n"
+    @staticmethod
+    def create_menu(obj, func_names: list):
+        h1 = "bold #3c1bc2"
+        b = "bold #6851c2"
+        obj.menu = f"[{h1}]COMMANDS[/{h1}]\n"
         for name in func_names:
             command = name.split("_")[1]
             fn = getattr(obj, name)
-            menu_str += f"[bold #6851c2]{command}[/bold #6851c2] [i] {fn.__doc__} [/i]\n"
-        self.menu = menu_str
+            obj.menu += f"[{b}]{command:10}[/{b}] [i]{fn.__doc__}[/i]\n"
+        obj.menu += f"[{b}]q[/{b}]          [i]quit[/i]"
 </code></pre>
 <p>Hurrah! We now have all our frankly ugly boilerplate corralled in one place, and our data class can use it whilst still looking clean and readable</p>
-<pre><code>@dataclass
+<pre><code>from dataclasses import dataclass
+from typing import ClassVar
+
+@dataclass
 class Test:
     """ sample test class for Interface class use"""
 
     val: str
-
-    def status(self):
-        'prints a rich formatted summary of the class'
-        clear()
-        rule(self.__doc__)
-        para(f'val: {self.val}')
-        rule("")
+    other_val: str = "cake"
+    menu: ClassVar[str] = ""
+    hidden: ClassVar[list] = ["menu", "hidden"]
 
     def interface(self):
-        'launches an interactive cli for the class'
-        self.status()
         Interface.from_dataclass(self)
 
     def do_1(self, arg):
         'echo back the val and arg'
-        self.status()
+        status(self)
         para(f'val: [i yellow]{self.val} [/i yellow] arg: [bold]{arg}[/bold]')
 
     def do_setval(self, arg):
         'change my value'
         self.val = arg
-        self.status()
+        status(self)
 </code></pre></main>
     <footer></footer>
 </body>
