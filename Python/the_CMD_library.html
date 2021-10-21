@@ -94,10 +94,10 @@ def convert_to_tuple(arg):
     except:
         print('sorry, try using add followed by two separate numbers')
 </code></pre>
-<h2>Making cmd <strong>useful</strong></h2>
-<h3>Instant help</h3>
+<h2>Making <code>cmd</code> <strong>useful</strong></h2>
+<h2>Instant help</h2>
 <p>By far the easiest trick with cmd is that it will display the docstring of any function by typing <code>function_name ?</code>. It is that simple. Typing <code>?</code> by itself will list all commands available.</p>
-<h3>Make cmd your live documentation with preloop and precmd</h3>
+<h2>Make cmd your live documentation with preloop and precmd</h2>
 <p>It can be very effective to have a clear set of instructions for your program on screen at all times. <code>preloop</code> and <code>precmd</code> are built in functions that fire off at the beginning of the cmd session and before each command is executed respectively, so are well placed to deliver option prompts as well as describing your program state in human terms.</p>
 <pre><code>from os import system
 import platform
