@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">   
+    <title>Pyparsing examples</title>
+    <style>
+    @import '../css/font-warlock.css';
+    @import '../css/colors-abyss.css';
+    @import '../css/layout-blog.css';
+    </style>
+    <script src="../scripts/click.js"></script>
+</head>
+<body>
+    
+    <header>
+        <h1>Pyparsing examples</h1>
+    <nav id="course_menu">
+    <a href="../index.html"><button>Home</button></a>
+    <button aria-roledescription="course links" click_toggle="#course_menu" >
+        Python Pyparsing
+    </button>
+    
+    <a href="../Python_Pyparsing/Pyparsing_examples.html"><button>Pyparsing examples</button></a>
+    
+</nav>
+    </header>
+    <main><p>Some time after you start this coding lark you realise that half the job is either talking to databases or parsers. You end up acquiring a set of parsers without really thinking about them, one (or more) for <code>.csv</code>, <code>.json</code> and then <code>.md, .yaml, .html, etc.</code> and they are all great! They make your feel more and more capable as you pluck the data you actually want out of the mess of information that comes your way. And they feel like proper 'maker' tools, your long <code>import</code> list becomes a display of all the skills you have mastered.</p>
+<p>So then curiosity gets you - what's going on here, could I make my own? You might read about PEG parsers and get slammed into graph theory. Oh look, Regular Expressions! The cognitive load, the amount of brain-space you need to commit for this next step is not cheap, and the pay off for your investment is far away. No wonder Google made an empire richer than ancient Rome by doing the search for people. What if there was an easier, more human way of thinking about it?</p>
+<h2>Pyparsing: Building search out of Legos, um, I mean Tokens</h2>
+<p>The Pyparsing library really feels like Lego. You have things you want to build - your search rules, and really nice, well made blocks (called 'tokens') to do it with. You click them together with a <code>+</code>, then run them with <code>.parseString(some_text)</code>. Easy huh? </p>
+<p>Lets use a few of Pyparsing's building blocks to get a feel for what they do. Say you want to skim through a markdown file to check any external hyperlinks. Our first job is to define what that a url might look like, and there is a very straightforward token to describe it with: <code>Word</code>. This defines what you are looking for: in our case a string that might be any combination of letters and numbers, plus a few odd characters like <code>/</code> and <code>.</code>. Its quite possible to manually specify the acceptable list, but Pyparsing has some predefined lists you can import for common tasks: <code>alphas</code>, <code>alphanums</code> and <code>printables</code> for growing subsets of ascii typed characters. You can add the extra characters you need very easily and exclude the ones you really don't want like single and double quotes, and Pyparsing deals intelligently with all sorts of whitespace. </p>
+<pre><code>from pyparsing import Word, alphanums
+
+url_token = Word(alphaums+"/ _ - .")
+</code></pre>
+<p>Next we need to say where to look. currently <code>url_token</code> will match any word in our text separated by a bit of whitespace, so we need to give some clues about which words matter. We do this by creating a <em>grammar</em> - describing what comes just before and just after the <code>url_token</code>. This is where it gets a little tricky, so lets look at an actual link: <code>[some link text](https://pyparsing-docs.readthedocs.io/en/latest/index.html)</code> because we don't want too many 'false positives'  matching against just an opening bracket is a bad idea (because we use them in other contexts), but we do want to at least capture everything that uses that syntax. Ironically I use this code on the markdown source of this page so the next code snippet is an image in order not to break my code as it tries to parse the triggers set up in the snippet...</p>
+<p><img alt="image of markdown link parser code" src="../media/markdown_parse_1.jpg" /></p>
+<p>Lets work through the tokens used:</p>
+<ul>
+<li><code>SkipTo</code> is one of my favourite tokens - all this junk until you find the start of the link! and <code>include=True</code> includes the actual url start pattern in this junk pile. By default pyparsing will return a list of what each token finds and as all this is junk we don't care about we need explicitly say that we don't want to keep the junk using the <code>suppress()</code> method.</li>
+<li><code>Literal</code> looks for an exact match which we are looking for as the end of our search, which again we don't want to keep, so is also marked <code>suppress()</code>. <code>CaselessLiteral</code> is sometimes handy if you want to do keyword searches.</li>
+<li><code>ZeroOrMore</code> is a nice loop function otherwise you only get the first matching pattern, or an exception if it fails to match anything. <code>OneOrMore</code> works in a similar way.</li>
+</ul>
+<p>Now sadly this pattern alone does not guarantee that everything it finds is a url ready to pass off to <code>pathlib</code> for it to do its stuff you may need to filter your results if you need to weed out hash links that jump to specific parts of a page.</p>
+<h2>Helpful links</h2>
+<ul>
+<li>(pyparsing classes with examples)[https://pythonhosted.org/pyparsing/pyparsing-module.html]</li>
+<li>(pyparsing docs)[https://pyparsing-docs.readthedocs.io/en/latest/HowToUsePyparsing.html#classes]</li>
+</ul></main>
+    <footer></footer>
+</body>
+</html>
