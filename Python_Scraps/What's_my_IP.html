@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">   
+    <title>What's my IP</title>
+    <style>
+    @import '../css/font-warlock.css';
+    @import '../css/colors-abyss.css';
+    @import '../css/layout-blog.css';
+    </style>
+    <script src="../scripts/click.js"></script>
+</head>
+<body>
+    
+    <header>
+        <h1>What's my IP</h1>
+    <nav id="course_menu">
+    <a href="../index.html"><button>Home</button></a>
+    <button aria-roledescription="course links" click_toggle="#course_menu" >
+        Python Scraps
+    </button>
+    
+    <a href="../Python_Scraps/What's_my_IP.html"><button>What's my IP</button></a>
+    
+</nav>
+    </header>
+    <main><h1>Hey, how do I get my IP address in python?</h1>
+<p>Quick answer:</p>
+<pre><code>import socket
+
+hostname = socket.gethostname()
+ip_address = socket.gethostbyname(hostname)
+print(ip_address)
+</code></pre>
+<p>I feel like I need this often enough to have a tidy data class version on hand as well:</p>
+<pre><code>import socket
+from dataclasses import dataclass
+
+
+@dataclass
+class Host:
+
+    hostname: str
+    ip_address: str
+
+    @classmethod
+    def get_local(cls):
+        hostname = socket.gethostname()
+        ip_address = socket.gethostbyname(hostname)
+        return cls(hostname, ip_address)
+
+    @property
+    def summary(self):
+        return f"Hostname: {hostname} \nIP Address: {ip_address}"
+
+if __name__ == "__main__":
+    home = Host.get_local()
+    print(home.summary)
+</code></pre></main>
+    <footer></footer>
+</body>
+</html>
