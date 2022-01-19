@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">   
+    <title>1 Variables</title>
+    <style>
+    @import '../css/font-warlock.css';
+    @import '../css/colors-abyss.css';
+    @import '../css/layout-blog.css';
+    </style>
+    <script src="../scripts/click.js"></script>
+</head>
+<body>
+    
+    <header>
+        <h1>1 Variables</h1>
+    <nav id="course_menu">
+    <a href="../index.html"><button>Home</button></a>
+    <button aria-roledescription="course links" click_toggle="#course_menu" >
+        Intro to Python
+    </button>
+    
+    <a href="../Intro_to_Python/2_Data_Types.html"><button>2 Data Types</button></a>
+    
+    <a href="../Intro_to_Python/1_Variables.html"><button>1 Variables</button></a>
+    
+</nav>
+    </header>
+    <main><h1>What is a Variable?</h1>
+<p>A variable is a labeled piece of data. What does that mean? Its dead simple! Think about the sentence "My name is Pink." the piece of data is the word "Pink" and the label is "name". In python we would write it like this:</p>
+<pre><code>name = "Pink"
+</code></pre>
+<p>and we can get python to print it out like this:</p>
+<pre><code>print(name)
+</code></pre>
+<h2>Why do we need variables?</h2>
+<p>We need variables if we want to store and reuse that data. We don't want to have to ask for someone's name every time we want to use in a sentence. And if you are like me you might envy a computers ability to remember a name if you only say it once.</p>
+<h2>what should we call our variables?</h2>
+<p>Anything we like! Except we can't use words python already uses - <code>print</code> for example, so never write <code>print = "something"</code>, but you can write <code>print_this</code> or to_be_printed<code>safely. Notice how I sneaked in another rule - you can't have spaces in your variable names, so use and underscore</code>_` instead. Why?
+well because you <strong>can</strong> assign more than one variable at a time like this:</p>
+<pre><code>name, job = "Pink", "Singer"
+</code></pre>
+<p>Be careful when you do this though, as keeping your code clear and readable makes it much more likely that you can spot mistakes.</p>
+<h2>what can we do with variables?</h2>
+<p>Lots of things! We might need to join them together, like this:</p>
+<pre><code>person_details = name + " is a " + job
+print(person_details)
+
+# prints out "Pink is a singer"
+</code></pre>
+<p>That's ok, but there is a better way for inserting your variables into a chunk of text call <strong>f-strings</strong> because they start with an <strong>f</strong>. They work like this:</p>
+<pre><code>customer = "Njala Omi"
+favorite_food = "cheese cake"
+
+greeting = f"hello {customer} would you like to order {favorite_food}?"
+</code></pre>
+<p>This is a bit easier to read, and can be reused as a template for greeting other customers with only a little bit of extra code. </p>
+<h2>Exercises</h2>
+<p>Try it for yourself using <strong>Mu</strong> or another editor. </p>
+<ul>
+<li>Make four or five variables</li>
+<li>join two together with <code>+</code> to make a new variable</li>
+<li>print out each of your variables</li>
+<li>print out an <strong>f-string</strong> using some of your variable.</li>
+</ul>
+<p>Think about what makes a good label for a a piece of information. When you realise that you can label them any way you like people get giddy or lazy when they write them. When I first made pro websites, I made this mistake with coolest project for a sports company - they loved what I did and wanted me to update their site six month later. By then I'd forgotten what my <code>cool names of fantasy monsters</code> variables meant as actual data and had to rewrite the whole thing. </p></main>
+    <footer></footer>
+</body>
+</html>

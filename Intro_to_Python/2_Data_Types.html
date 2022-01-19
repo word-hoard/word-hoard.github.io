@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">   
+    <title>2 Data Types</title>
+    <style>
+    @import '../css/font-warlock.css';
+    @import '../css/colors-abyss.css';
+    @import '../css/layout-blog.css';
+    </style>
+    <script src="../scripts/click.js"></script>
+</head>
+<body>
+    
+    <header>
+        <h1>2 Data Types</h1>
+    <nav id="course_menu">
+    <a href="../index.html"><button>Home</button></a>
+    <button aria-roledescription="course links" click_toggle="#course_menu" >
+        Intro to Python
+    </button>
+    
+    <a href="../Intro_to_Python/2_Data_Types.html"><button>2 Data Types</button></a>
+    
+    <a href="../Intro_to_Python/1_Variables.html"><button>1 Variables</button></a>
+    
+</nav>
+    </header>
+    <main><h1>What is a Data Type?</h1>
+<p>A Data Type is the way a programming language knows what to do with a chunk of data. For example if you give python two numbers it should be able to add them together right? But hold on, what about two phone numbers? What about if you have your birthday on the 25th of a Month and want to know what the date is ten days later? Know the difference between these types of numbers is something thats obvious to a human but a computer needs to be told.</p>
+<h2>Experiment 1</h2>
+<p>Start a new python file called <code>data_types</code> and set up the  following variables:</p>
+<pre><code>a_number = "two "
+b_number = "2"
+c_number = 2
+pi_number = 3.14
+is_happy = True
+</code></pre>
+<p>Then try the following experiments:</p>
+<pre><code>print(a_number + b_number)
+print(a_number * c_number)
+</code></pre>
+<p>What did you get? was it what you expected? Now try this:</p>
+<pre><code>print(a_number + a_number)
+print(b_number + b_number)
+print(c_number + c_number)
+</code></pre>
+<p>What happened? Was it what you expected?</p>
+<p>Now lets try something python won't like:</p>
+<pre><code>print(b_number + c_number)
+</code></pre>
+<p>Did you get an error like this?</p>
+<pre><code>TypeError: can only concatenate str (not "int") to str
+</code></pre>
+<p>Huh! What's going on? What's a type error? What does <code>concatenate</code> mean? What is a <code>str</code> or an <code>int</code>???</p>
+<h2>Hold on! what is a "Type"?</h2>
+<p>A type is general word for a specialized object or living thing. Think about the sentence "she tried to use a screwdriver to cut a hole in the wood, but it was the wrong <code>type</code> of tool'. So a <code>Data Type</code> is a type of data that is good at some things and not others</p>
+<h2>Experiment 2</h2>
+<p>Lets ask python to tell us what <code>type</code> each of our variables is:</p>
+<pre><code>print("a", type(a_number))
+print("b", type(b_number))
+print("c", type(c_number))
+print("pi", type(pi_number))
+print("happy", type(is_happy))
+</code></pre>
+<p>lets go through what we have found out</p>
+<h2>'str' is short for 'string'</h2>
+<p>This is a very silly name. But think of a string as any combination of letters or numbers that we <strong>don't</strong> want to do maths with. A string can be as short as one letter or as long as all the books in a library (or more!). How long is a piece of string, after all? </p>
+<p><strong>The Rules for strings:</strong></p>
+<ul>
+<li>Strings are always put inside quotes or double quotes</li>
+<li>Strings can be joined together (<code>concatenated</code> is the computing word) using <code>+</code> or repeated using <code>*</code></li>
+</ul>
+<h2>'int' or integer</h2>
+<p>This is much more sensible, you should recognize the word <code>integer</code> from maths. It is <strong>always</strong> a whole number, but can be negative.</p>
+<p><strong>The Rules for integers:</strong></p>
+<ul>
+<li>integers are always whole numbers</li>
+<li>integers are <strong>not</strong> in quotes</li>
+<li>python will do normal maths between two integers using <code>+</code> for adding, <code>-</code> for subtraction and <code>*</code> for multiplication. You can also divide with <code>/</code> but if the answer is not a whole number then the answer isn't an integer, it is our next data type the <code>float</code>.</li>
+</ul>
+<h2>float</h2>
+<p>Float is short for 'floating point numbers' are any number written with a decimal point.</p>
+<p><strong>The Rules for floats:</strong></p>
+<ul>
+<li>they are written without quotes</li>
+<li>you can do maths with them in the same way as integers</li>
+<li>you may need to 'tidy them up' as they may use more decimal places than you want</li>
+</ul>
+<h2>'bool' or 'boolean'</h2>
+<p>A boolean is any piece of information that can be <code>True</code> or <code>False</code> and <strong>nothing else</strong>. There are no maybes in boolean data types</p>
+<p><strong>The Rules for booleans:</strong></p>
+<ul>
+<li>are not written with quotes</li>
+<li>must be <code>True</code> or <code>False</code> with capitals</li>
+<li>you can't do maths with them but you can test them</li>
+</ul>
+<p>Test code:</p>
+<pre><code>if is_happy:
+    print("I'm happy")
+else:
+    print("I'm not happy")
+</code></pre>
+<h2>Experiment 3</h2>
+<p>Try the code for testing boolians in your file, and change the value of <code>is_happy</code> from <code>True</code> to <code>False</code> and see what happens.</p>
+<p>Try out using the different maths operators <code>+-*/</code> on the different data types to see what happens. Look out for, but don't be afraid of when it 'throws' an error.</p>
+<h2>Mastery Level - Higher data types</h2>
+<p>There are other really useful other data types to know about, but we'll just add one more to this lesson: the <code>list</code>. </p>
+<h2>Lists</h2>
+<pre><code>group_members = ["Bill", "Ted", "Chani", "Leah"]
+</code></pre>
+<p><strong>The Rules for lists:</strong></p>
+<ul>
+<li>they are written with <code>[]</code> square brackets</li>
+<li>they can have any number of data chunks inside them, including empty lists with <strong>no</strong> data</li>
+<li>each piece of data must be separated by a comma</li>
+<li>the data can be of different types, but it is usually more useful if they are all the same...</li>
+</ul>
+<p>You will find lists really useful for looking at <a href="" title="iteration.html">loops and iteration</a></p></main>
+    <footer></footer>
+</body>
+</html>
