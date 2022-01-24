@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">   
+    <title>3 Iteration</title>
+    <style>
+    @import '../css/font-warlock.css';
+    @import '../css/colors-abyss.css';
+    @import '../css/layout-blog.css';
+    </style>
+    <script src="../scripts/click.js"></script>
+</head>
+<body>
+    
+    <header>
+        <h1>3 Iteration</h1>
+    <nav id="course_menu">
+    <a href="../index.html"><button>Home</button></a>
+    <button aria-roledescription="course links" click_toggle="#course_menu" >
+        Intro to Python
+    </button>
+    
+    <a href="../Intro_to_Python/1_Variables.html"><button>1 Variables</button></a>
+    
+    <a href="../Intro_to_Python/2_Data_Types.html"><button>2 Data Types</button></a>
+    
+    <a href="../Intro_to_Python/3_Iteration.html"><button>3 Iteration</button></a>
+    
+    <a href="../Intro_to_Python/4_Truth.html"><button>4 Truth</button></a>
+    
+</nav>
+    </header>
+    <main><h1>What is a Iteration?</h1>
+<p>Iteration is sort of the whole point of using a computer. Sure you can get computers to do all sorts of fancy other stuff, but iteration is the power of not just doing the right thing once, but doing it billions of times. of course you have to be careful not to do the wrong thing billions of times.... </p>
+<h2>1 Iterating through a task where you know all the data ahead of time</h2>
+<p>This is by far the most common sort of loop that comes up in python. Say you want to send an e-mail to every person in a group automatically once a month. Your write out the code for sending one email, and then use it for every person. The Python <code>List</code> is often the best tool for the job.</p>
+<h2>Recap: Lists</h2>
+<p>A list in python is a data type:</p>
+<pre><code>group_members = ["Bill", "Ted", "Chani", "Leah"]
+</code></pre>
+<p><strong>The Rules for lists:</strong></p>
+<ul>
+<li>they are written with <code>[]</code> square brackets</li>
+<li>they can have any number of data chunks inside them, including empty lists with <strong>no</strong> data</li>
+<li>each piece of data must be separated by a comma</li>
+<li>the data can be of different types, but it is usually more useful if they are all the same...</li>
+</ul>
+<h2>Exercise 1 Using lists in loops</h2>
+<p>write out and run the following code.</p>
+<p>This is really easy:</p>
+<pre><code>group_members = ["Bill", "Ted", "Chani", "Leah"]
+
+for person in group_members:
+    print(f"Hello {person} how are you?")
+</code></pre>
+<p>Remember to use the tab button to indent your print line. You can also use lists to collect information. change your code to do this:</p>
+<pre><code>group_members = ["Bill", "Ted", "Chani", "Leah"]
+
+answers = []
+
+for person in group_members:
+    answer = input(f"Hello {person} how are you?")
+    answers.append(f"{person=} :: {answer=}")
+
+print(answers)
+</code></pre>
+<p>If you just need to do a task a set number of times, python can even create the list of numbers you need. Try this:</p>
+<pre><code>for i in range(4):
+    print(f"{i=} haha! I love to count!")
+</code></pre>
+<p>Notice that in code you start with a zero and stop before you get to the final number. Whilst this seems crazy it is really useful, but don't worry about it for the moment, you still get four numbers.</p>
+<h2>2 Iterating when you might end at any time.</h2>
+<p>Sometimes you don't know ahead of time how long to repeat a loop for. Think of a task like looking for lost keys. You only need to search for them until you find them, then you stop. This is a very common task in games, you play a level until you have won it, a monster fights until it has no more health, etc.</p>
+<p>In order to do this you need to understand <a href="4_truth.html">HOW TO TEST THE TRUTH</a> so click on the link and learn that first.</p>
+<p>We can tell python to do a task until one (or more) things change from false to true or true to false. We call this a <code>while loop</code> and it works like this:</p>
+<h2>Exercise 2</h2>
+<p>This code will loop until you  guess bob's name, type it out and run it a few times to get a feel for what it does.</p>
+<pre><code>name = ""
+while name != 'bob':
+    name =  input("what is my name? ")
+
+print("you guessed my  name!")
+</code></pre>
+<p>There are risks with using <code>while</code> loops - if you code them badly you can get stuck in them forever - this is the reason that games are some of the worst software for crashing, because almost every game element has one or more loops running at once. </p>
+<p>If this happens with your own can press the stop button in mu or type <code>Ctrl+C</code> to break out of your loop. Or at worst close the app that you are running python on. Don't worry, it happens to the best coders!</p>
+<h2>Gold task - fixing common problems</h2>
+<p>Often we get the right data in the wrong format or in a messy way. So with <code>"2" != 2</code> a string with the same number in it as an integer does not match so Python will call this <code>True</code>. </p>
+<p>The <code>input</code> function <code>returns</code> (or gives back) <strong>any</strong> user input as a string. Which means that if you try matching it with an integer it won't work. However you can convert the string to an integer like this:</p>
+<pre><code>guess = 0
+while guess != 3:
+    guess =  input("what is my number? ")
+    guess = int(guess)
+</code></pre>
+<p><code>int(guess)</code> converts the guess to an integer - well it tries to but you can't convert <code>All</code> to <code>411</code>, <code>str(guess)</code> converts integers to strings fairly reliably though.</p>
+<p>Whilst we are fixing things, did you notice that <code>guess bob's name</code> did not recognize <code>Bob</code> or <code>BOB</code>? when you think about it <code>"bob" != "BOB"</code>, but perhaps we can do better... change your script for bob's game to add two <strong>tiding up</strong> functions: <code>strip</code> and <code>lower</code></p>
+<p>name = ""
+while name != 'bob':
+    name =  input("what is my name? ")
+    name = name.strip() # removes 'space-bar' characters
+    name = name.lower() # changes the letters to lower case
+print("you guessed my name!")</p>
+<p>Fix and re-run the script to test it.</p></main>
+    <footer></footer>
+</body>
+</html>

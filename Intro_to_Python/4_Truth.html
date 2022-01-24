@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">   
+    <title>4 Truth</title>
+    <style>
+    @import '../css/font-warlock.css';
+    @import '../css/colors-abyss.css';
+    @import '../css/layout-blog.css';
+    </style>
+    <script src="../scripts/click.js"></script>
+</head>
+<body>
+    
+    <header>
+        <h1>4 Truth</h1>
+    <nav id="course_menu">
+    <a href="../index.html"><button>Home</button></a>
+    <button aria-roledescription="course links" click_toggle="#course_menu" >
+        Intro to Python
+    </button>
+    
+    <a href="../Intro_to_Python/1_Variables.html"><button>1 Variables</button></a>
+    
+    <a href="../Intro_to_Python/2_Data_Types.html"><button>2 Data Types</button></a>
+    
+    <a href="../Intro_to_Python/3_Iteration.html"><button>3 Iteration</button></a>
+    
+    <a href="../Intro_to_Python/4_Truth.html"><button>4 Truth</button></a>
+    
+</nav>
+    </header>
+    <main><h1>What is True?</h1>
+<p>Boolean Data Types can only be <code>True</code> or <code>False</code>, but that doesn't really mean much until we know <em>what</em> is true or false. Try and name your Booleans so they give you a clue as to what this <code>is</code> is about: for example <code>is_a_fruit</code>, <code>is_paid_for</code>, <code>is_group_member</code>.</p>
+<p>This is OK if you already know the truth about something, but you often need your code to decide what is <code>True</code> for you.</p>
+<h2>Exercise 1</h2>
+<p>Try this code and run it a few times, entering in different names each time, including 'bob' and 'Bob'</p>
+<pre><code>name =  input("what is your name? ")
+
+is_bob = name == "bob"
+
+print(f"{name=}  {is_bob=}")
+</code></pre>
+<p>This bit of code is a bit confusing though - what is going on the second line with the <code>=</code> sign and the <code>==</code> sign?!?</p>
+<p>The quick answer is the double <code>=</code> is a <code>comparison operator</code>. You have already met <code>arithmetic operators</code> (the maths symbols <code>+-*/</code>, oh and <code>%, **, //</code> as well...) and the <code>assignment operator =</code>.</p>
+<p>Basically <code>comparison operators</code> compare two things like this:</p>
+<ul>
+<li><code>==</code> is equal to <code>3 == 3</code></li>
+<li><code>!=</code> is not equal to <code>3 != 4</code></li>
+<li><code>&gt;</code> is greater than <code>10 &gt; 5</code></li>
+<li><code>&lt;</code> is less than <code>3 &lt; 5</code></li>
+<li><code>&gt;=</code> is greater than or equal to <code>10 &gt;= 10</code></li>
+<li><code>&lt;=</code>  is less than or equal to <code>4 &lt;= 14</code></li>
+</ul>
+<h1>Exercise 2</h1>
+<p>Try this code:</p>
+<pre><code>test_numbers = [3, 7, 33, 1, 740]
+
+for number in test_numbers:
+    is_greater_than_five = number &gt; 5
+    print(f"{number=} {is_greater_than_five=}")
+</code></pre>
+<p>If you have time try different comparison operators.</p>
+<h2>IF</h2>
+<p>Often we don't bother storing our Boolean truth as a variable, but use it immediately to perform a <code>selection algorithm</code> like this:</p>
+<pre><code>score = 45
+
+if score &gt; 50:
+    print("excellent score")
+else:
+    print("better luck next time...")
+</code></pre>
+<p><code>If statments</code> as <code>selection algorithm</code> can get quite complicate, but try as basic one like this before going back to <a href="3_iteration.html">iteration</a></p></main>
+    <footer></footer>
+</body>
+</html>
