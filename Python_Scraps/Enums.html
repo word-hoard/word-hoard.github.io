@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">   
+    <title>Enums</title>
+    <style>
+    @import '../css/font-warlock.css';
+    @import '../css/colors-abyss.css';
+    @import '../css/layout-blog.css';
+    </style>
+    <script src="../scripts/click.js"></script>
+</head>
+<body>
+    
+    <header>
+        <h1>Enums</h1>
+    <nav id="course_menu">
+    <a href="../index.html"><button>Home</button></a>
+    <button aria-roledescription="course links" click_toggle="#course_menu" >
+        Python Scraps
+    </button>
+    
+    <a href="../Python_Scraps/Enums.html"><button>Enums</button></a>
+    
+    <a href="../Python_Scraps/What's_my_IP.html"><button>What's my IP</button></a>
+    
+</nav>
+    </header>
+    <main><h1>What's an enum?</h1>
+<p>Quick answer:</p>
+<p>A single source of truth, for when fifty shades of a colour is really forty five too many. More specifically, it codifies this truth in a way that is object orientated and therefor type checkable, code completable, and less squishy. Structurally it feels very much like a dictionary of values.</p>
+<pre><code>greys = {"DarkSlateGray": "#2F4F4F",
+        "DimGrey":"#696969",
+        "LightGray": "#D3D3D3"}
+</code></pre>
+<p>can be turned into an <code>enum</code> like this :</p>
+<pre><code>from enum import Enum
+
+class Gray(Enum):
+
+    DARKSLATE = "#2F4F4F"
+    DIM = "#696969"
+    LIGHT = "#D3D3D3"
+
+print(greys["DarkSlateGray"])
+print(Gray.DARKSLATE.value)
+</code></pre>
+<p>That's it! So what's the point? Well how about this: grey / gray, colour / color are both legitimate spellings, so cultural tolerance is great but which did my colleague use? HTML uses both greys. <code>Enums</code> are for when strictness is helpful, so when you are making colour swatches, days of the week, config options, or other hard coded values. And if each <code>enum</code> value is a <code>dataclass</code>, then your VS code completion becomes super effective, much of which is lost using a dict.</p>
+<pre><code>from enum import Enum
+from dataclasses import dataclass
+
+@dataclass
+class Color:
+    name: str
+    hex_val: str
+
+class Gray(Enum):
+
+    DARKSLATE = Color("DarkSlateGray", "#2F4F4F")
+    DIM = Color("DimGrey", "#696969")
+    LIGHT = Color("LightGray", "#D3D3D3")
+
+    @property
+    def hex_val(self):
+        return self.value.hex_val
+
+    @classmethod
+    def get_by_name(cls, val: str):
+        return cls[val.upper()]
+
+test = Gray.get_by_name('dim')
+
+print(test)
+
+for g in Gray:
+    print(g.hex_val)
+</code></pre></main>
+    <footer></footer>
+</body>
+</html>
