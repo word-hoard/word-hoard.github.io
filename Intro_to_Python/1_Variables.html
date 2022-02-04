@@ -33,7 +33,7 @@
 </nav>
     </header>
     <main><h1>What is a Variable?</h1>
-<p>A variable is a labeled piece of data. What does that mean? Its dead simple! Think about the sentence "My name is Pink." the piece of data is the word "Pink" and the label is "name". In python we would write it like this:</p>
+<p>A variable is a labelled piece of data. What does that mean? Its dead simple! Think about the sentence "My name is Pink." the piece of data is the word "Pink" and the label is "name". In python we would write it like this:</p>
 <pre><code>name = "Pink"
 </code></pre>
 <p>and we can get python to print it out like this:</p>
@@ -69,7 +69,21 @@ greeting = f"hello {customer} would you like to order {favorite_food}?"
 <li>print out each of your variables</li>
 <li>print out an <strong>f-string</strong> using some of your variable.</li>
 </ul>
-<p>Think about what makes a good label for a a piece of information. When you realise that you can label them any way you like people get giddy or lazy when they write them. When I first made pro websites, I made this mistake with coolest project for a sports company - they loved what I did and wanted me to update their site six month later. By then I'd forgotten what my <code>cool names of fantasy monsters</code> variables meant as actual data and had to rewrite the whole thing. </p></main>
+<p>Think about what makes a good label for a a piece of information. When you realise that you can label them any way you like people get giddy or lazy when they write them. When I first made pro websites, I made this mistake with coolest project for a sports company - they loved what I did and wanted me to update their site six month later. By then I'd forgotten what my <code>cool names of fantasy monsters</code> variables meant as actual data and had to rewrite the whole thing. </p>
+<h2>Exercise</h2>
+<p>Lets do something with them that isn't just printing out...</p>
+<pre><code>import webbrowser
+
+wiki_url = "https://en.wikipedia.org/wiki/"
+
+topic = input("what do you want to look for? ")
+topic = topic.replace(" ", "_")
+
+full_url = wiki_url + topic
+
+webbrowser.open(full_url, new=2)
+</code></pre>
+<p>It can be a bit hit and miss as to whether Wikipedia has exactly the page you want but its interesting to look in the address bar to see what does work.</p></main>
     <footer></footer>
 </body>
 </html>
