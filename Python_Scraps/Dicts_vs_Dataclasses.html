@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">   
+    <title>Dicts vs Dataclasses</title>
+    <style>
+    @import '../css/font-warlock.css';
+    @import '../css/colors-abyss.css';
+    @import '../css/layout-blog.css';
+    </style>
+    <script src="../scripts/click.js"></script>
+</head>
+<body>
+    
+    <header>
+        <h1>Dicts vs Dataclasses</h1>
+    <nav id="course_menu">
+    <a href="../index.html"><button>Home</button></a>
+    <button aria-roledescription="course links" click_toggle="#course_menu" >
+        Python Scraps
+    </button>
+    
+    <a href="../Python_Scraps/Dicts_vs_Dataclasses.html"><button>Dicts vs Dataclasses</button></a>
+    
+    <a href="../Python_Scraps/Enums.html"><button>Enums</button></a>
+    
+    <a href="../Python_Scraps/What's_my_IP.html"><button>What's my IP</button></a>
+    
+</nav>
+    </header>
+    <main><h1>Dictionaries vs. Dataclasses</h1>
+<p>So I don't use dictionaries any more because, dataclasses are so much better. Well, nearly all the time...</p>
+<h2>So why are Dataclasses so great?</h2>
+<p><em>Aesthetics.</em> They look great, and that matters - it's mechanically harder to read <code>my_dict["my_key"]</code> than it is to read <code>my_dataclass.my_key</code>. The nest of vertical lines and quotes <em>are</em> a tax on the cognitive cost of reading, and not everyone gets taxed at the same rate, You only need slight dyslexia and that tax goes up. The same goes for the way they are written in the first place.</p>
+<p>Lets walk through an example: </p>
+<pre><code>from dataclasses import dataclass
+
+@dataclass
+class Person:
+
+    first_name: str
+    fam_name: str
+    pronouns: str
+</code></pre>
+<p>This is already better than both ordinary classes and dictionaries, and in many cases it is enough to have a clearly defined (and therefor predictable) chunk of data, but its very easy to take it further. Any process that interacts <em>solely</em> with the content of the dataclass can be done as a <code>property</code> like this:</p>
+<pre><code>#from previous code...
+
+    @property
+    def full_name(self):
+        return f"{self.first_name} {self.fam_name}({self.pronouns})"
+</code></pre>
+<p>And with a few tweaks this could automatically swap family name to the front if required, add a title, etc..</p>
+<p>I have a personal rule that if a function <em>can</em> be replaced with a <code>@property</code> it <em>should</em> be done in that way. This is a matter of style, but from a code organization point of view it really helps. 'Loose' functions and lines of code lying around bother me, perhaps unduly, not only because they 'pollute the name space', but because my feeble brain will forget they exist, or <em>where</em> I put them or <em>what</em> they are called. This is why I'm not fond of dictionaries either, they are in some respects <em>too</em> easy and squishy, made in a single statement and causing bother everywhere they are used, because there are no guarantees that they are in the same shape that I <em>thought</em> I'd left them. I'll shake my fist at that passing cloud, and tell it to get off my lawn, like the grumpy old man that I am.</p>
+<p>Dataclasses on the other hand can be as locked down as you like. Make them immutable and hashable by using <code>@dataclass(frozen=True)</code> as the decorator. Or upgrade to the very similar <code>pydantic</code> class objects for even better validation if you don't mind the <code>import</code>.</p>
+<p>So now I have a reliable, readable data structure, but why not a basic class - after all you get the <code>__init__()</code> method to pre process your data from whatever source you want. Well This is where <code>@classmethod</code> is quite frankly better.</p>
+<pre><code># added to previous example
+
+    @classmethod
+    def from_xl_row(cls, row):
+        # do some processing
+        return cls(data, processed, from_row)
+</code></pre>
+<p>By using a class method instead of <code>__init__()</code> you now have two ways to generate an instance of your dataclass <code>Person()</code> and <code>Person.from_xl_row()</code> and you can instantly tell when each option is the right one to use if you named them well, and you can make more entry methods from other data sources. Furthermore, you often want to compile lists of dataclasses - one <code>Person</code> by themselves is very lonely - in the example above, which I use to get a <code>Person</code> from a row in a spreadsheet, I have a follow up class method that takes in a spreadsheet and returns a list of <code>Person</code>s.</p>
+<p>That in turn, brings me back to dictionaries greatest feature and why they should still be well thumbed 'books' of knowledge. Dictionaries are about as fast as python gets for searching for things. And lists of dataclasses are not. So if you do have a long list of dataclasses and want to search through them effectively, <em>and</em> they have a unique value for whatever you want to search by, then making a dictionary of your list like this might be good:</p>
+<pre><code>index_by_id = {person.id: person for person in person_list}
+</code></pre>
+<p>Dictionaries are also really fast for python to create in comparison to dataclasses, by over an order of magnitude. If you are creating a few thousand dataclasses in your runtime, this probably doesn't matter unless you have constrained hardware or a time sensitive app, so the benefits of static type checking outweigh the extra second or two of run time.</p>
+<h2>Upgrading dataclasses</h2>
+<p>There are a number of third party libraries that take dataclasses in different directions: </p>
+<p><a href="https://github.com/samuelcolvin/pydantic">Pydantic</a> type checks and attempts type conversion of mismatching arguments (e.g. strings to ints) at initialization and has a dataclass 'drop in' replacement.</p>
+<p><a href="https://github.com/dabeaz/dataklasses">Dataklasses</a> speeds up class creation to nearly the speed of dictionaries with a simpler boiler plate generator than standard dataclasses</p>
+<p>Of course at some point when your data pushes north of a few thousand data objects, you might come to think - maybe I should be using a database and an ORM / ODM to manage my data? At that point <a href="https://github.com/tiangolo/sqlmodel">sqlmodel</a> (which combines pydantic's type correction and sqlalchemy's orm) is a nice clean upgrade, using a dataclass style syntax.</p></main>
+    <footer></footer>
+</body>
+</html>
