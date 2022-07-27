@@ -39,7 +39,7 @@ url_token = Word(alphaums+"/ _ - .")
 <p><img alt="image of markdown link parser code" src="../media/markdown_parse_1.jpg" /></p>
 <p>Lets work through the tokens used:</p>
 <ul>
-<li><code>SkipTo</code> is one of my favourite tokens - all this junk until you find the start of the link! and <code>include=True</code> includes the actual url start pattern in this junk pile. By default pyparsing will return a list of what each token finds and as all this is junk we don't care about we need explicitly say that we don't want to keep the junk using the <code>suppress()</code> method.</li>
+<li><code>SkipTo</code> is one of my favorite tokens - all this junk until you find the start of the link! and <code>include=True</code> includes the actual url start pattern in this junk pile. By default pyparsing will return a list of what each token finds and as all this is junk we don't care about we need explicitly say that we don't want to keep the junk using the <code>suppress()</code> method.</li>
 <li><code>Literal</code> looks for an exact match for the string we are looking for as the end of our search, which again we don't want to keep, so is also marked <code>suppress()</code>. <code>CaselessLiteral</code> is sometimes handy if you want to do keyword searches.</li>
 <li><code>ZeroOrMore</code> is a nice loop function otherwise you only get the first matching pattern, or an exception if it fails to match anything. <code>OneOrMore</code> works in a similar way.</li>
 </ul>
