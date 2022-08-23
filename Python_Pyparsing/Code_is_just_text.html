@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">   
+    <title>Code is just text</title>
+    <style>
+    @import '../css/font-warlock.css';
+    @import '../css/colors-abyss.css';
+    @import '../css/layout-blog.css';
+    </style>
+    <script src="../scripts/click.js"></script>
+</head>
+<body>
+    
+    <header>
+        <h1>Code is just text</h1>
+    <nav id="course_menu">
+    <a href="../index.html"><button>Home</button></a>
+    <button aria-roledescription="course links" click_toggle="#course_menu" >
+        Python Pyparsing
+    </button>
+    
+    <a href="../Python_Pyparsing/Code_is_just_text.html"><button>Code is just text</button></a>
+    
+    <a href="../Python_Pyparsing/Pyparsing_examples.html"><button>Pyparsing examples</button></a>
+    
+</nav>
+    </header>
+    <main><h2>Code really is just text, and text is code</h2>
+<p>The fact that code really is just a synonym for text really is such a broad generalization that we often skip over some really important ideas. In some workplaces you can't email python files because clearly that's a security issue, yet just renaming the file to <code>evil_bad_thing.txt</code> suddenly makes a hacker tool safe to share right? Especially when you consider python has the power to switch conceptual contexts with appalling ease. </p>
+<pre><code>mycode = 'print("hello world")'
+exec(mycode)
+x = eval("2+2")
+</code></pre>
+<p>There isn't anything safe here. <code>exec</code> and <code>eval</code> have no guard rails and will chow down on anything. Imagine using them in a web app and executing <em>any</em> text sent to your server. So I never, never, NEVER want to use them. But I do want to be able to think about code as text and text as code in safer ways, because you can do some really nice meta-magic with that approach.</p>
+<h2>Get all your docstrings</h2>
+<p>Several documentation generators do this and build out full html sites for you code project, but it can sometimes be handy to do this in a lightweight way.</p>
+<pre><code>from rich import print
+import my_module
+
+def print_docstring(fn: str, dc= my_module.__dict__):
+    return f"[b]{fn}[/b]\n[i]{dc[fn].__doc__}[/i]"
+
+fns = [f for f in my_module.__dict__ if not f.startswith("__")]
+for f in fns:
+    print_docstring(f)
+</code></pre></main>
+    <footer></footer>
+</body>
+</html>
